@@ -75,21 +75,21 @@
 }
 
 \newcommand{\CustomPrintingBackground}[1]{%Used to add the 3mm shift at the bottom of the background when using the printing version 
-    \backgroundsetup{
-        scale=1,
-        opacity=1,
-        angle=0,
-        color=black,
-        vshift=-3mm, %This one is the fix
-        hshift=-3mm,
-        contents={
-        \ifodd\value{page}
-          \includegraphics[width=\paperwidth,height=\paperheight,angle=180]{Media/#1}%%Odd pages
-        \else
-          \includegraphics[width=\paperwidth,height=\paperheight]{Media/#1}%%Even pages
-        \fi
-        }
-    }
+  \backgroundsetup{
+      scale=1,
+      opacity=1,
+      angle=0,
+      color=black,
+      vshift=-3mm, %This one fixes the height issue
+      %hshift=+1.5mm,
+      contents={
+      \ifodd\value{page}
+        \includegraphics[width=\paperwidth+3mm,height=\paperheight,angle=180,trim=-9.5mm 0mm 0mm 0mm,clip=true]{Media/#1}%%Odd pages
+      \else
+        \includegraphics[width=\paperwidth+3mm,height=\paperheight,trim=-9.5mm 0mm 0mm 0mm,clip=true]{Media/#1}%%Even pages
+      \fi
+      }
+  }
 }
 
 
