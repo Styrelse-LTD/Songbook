@@ -17,13 +17,30 @@
 \\*
 }
 
+\newenvironment{Censor}[1]
+{
+\ifprinting
 
+\else
+#1
+\fi
+}
+
+\newenvironment{PrintingVariant}[2]
+{
+\ifprinting
+#1
+\else
+#2
+\fi
+}
 
 \usepackage{graphicx} % Required for inserting images
 %\usepackage{parskip} % Stops indenet after paragraph change
 \usepackage{fancyhdr}
 \usepackage{ragged2e} 
 \raggedbottom
+\sloppy % Tries to force lines to stay within margins
 \usepackage{titling}
 \newcommand{\subtitle}[1]{%
   \posttitle{%
@@ -49,12 +66,30 @@
         color=black,
         contents={%
         \ifodd\value{page}
-            \includegraphics[width=\paperwidth, angle=180]{Media/#1}%%Odd pages
+            \includegraphics[width=\paperwidth,height=\paperheight]{Media/#1}%%Odd pages
         \else
-            \includegraphics[width=\paperwidth]{Media/#1}%%Even pages
+            \includegraphics[width=\paperwidth,height=\paperheight, angle=180]{Media/#1}%%Even pages
         \fi
         }
     }
+}
+
+\newcommand{\CustomPrintingBackground}[1]{%Used to add the 3mm shift at the bottom of the background when using the printing version 
+  \backgroundsetup{
+      scale=1,
+      opacity=1,
+      angle=0,
+      color=black,
+      vshift=-3mm, %This one fixes the height issue
+      %hshift=+1.5mm,
+      contents={
+      \ifodd\value{page}
+        \includegraphics[width=\paperwidth+3mm,height=\paperheight,angle=180,trim=-9.5mm 0mm 0mm 0mm,clip=true]{Media/#1}%%Odd pages
+      \else
+        \includegraphics[width=\paperwidth+3mm,height=\paperheight,trim=-9.5mm 0mm 0mm 0mm,clip=true]{Media/#1}%%Even pages
+      \fi
+      }
+  }
 }
 
 
@@ -93,9 +128,20 @@
 
 \renewcommand{\thesubsubsection}{} % Removes the numbering from the left side of subsections in the ToC
 
-
-\usepackage{geometry}
+\usepackage{geometry} % Switch on for non frame view
+%\usepackage[showframe]{geometry} % Switch on for frame view
  \geometry{a6paper}
+
+ \usepackage{lmodern}
+ \usepackage{layouts} % Used for debuging the goemetry sizes
+
+ % New Margins and shit (EXPERIMENTAL AS OF 2024-10-28)
+ 
+ \setlength{\textheight}{125mm}
+ \setlength{\headsep}{5mm}
+ \setlength{\footskip}{5mm}
+ 
+
 
 \usepackage{tocloft}
 \usepackage{etoc} % Adds the functionallity to have two ToC
@@ -114,5 +160,12 @@
 \usepackage{pythontex}
 
 \usepackage{adjustbox}%Used for rotating in Inledning
+
+\usepackage{pdfpages}%Used for title pages
+
+\usepackage{xcolor}%Used for title colour
+
+\usepackage{longtable}%Used in O Gamla Klang och Jubeltid
+
 
 \endinput

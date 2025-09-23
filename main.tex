@@ -1,8 +1,25 @@
 \documentclass[twoside]{article}
 
+\newif\ifprinting
+%\printingtrue %Censor some songs and sections
+\newif\ifcover
+\covertrue %Adds a coloured front page to look like the cover : )
+
 \usepackage{setup}%includes setup.sty
 
-\title{Songbok}
+\ifprinting
+    \setlength{\paperheight}{\paperheight+6mm}
+    \setlength{\paperwidth}{\paperwidth+3mm}
+    \setlength{\voffset}{\voffset+3mm}
+    \ifodd\value{page}
+        \setlength{\hoffset}{\hoffset}
+    \else
+        \setlength{\hoffset}{\hoffset}
+    \fi
+    
+\fi
+
+\title{Songbok template}
 \subtitle{Subtitle}
 \author{Förening}
 \date{Upplaga}
@@ -11,24 +28,77 @@
 \setlength{\parskip}{6pt plus 2pt minus 2pt}
 \setlength{\parindent}{0pt}
 
+\backgroundsetup{contents={}}
+
+\thispagestyle{empty}
+
+\ifcover
+    \CustomBackground{PurpleGeltex.jpg}
+
+    \newgeometry{left=1.5cm,right=1.5cm}
+
+    \begin{figure}[!h]
+        
+        \centering
+        
+        \centerline{\includegraphics[width = \textwidth]{Media/temp-logo-png-transparent.png}}
+
+        
+
+        \Huge
+
+        \phantom{text}
+
+        \color{white}
+        \bf{Songbok}\\*%
+        \large
+        \bf{Subtitle}
+        
+    \end{figure}
+    \color{black}
+    \normalsize
+    \restoregeometry
+    \newpage
+    \CustomBackground{EmptyBackground.png}
+    \phantom{text}
+    \newpage
+\fi   
 
 \maketitle
 
 \newpage
 
-\backgroundsetup{contents={}}
-
-\thispagestyle{empty}
-
-
-\CustomBackground{Artboard 1.png}{Artboard 2.png}
 \input{Kapitel/Innehåll}
 
+\ifprinting
+    \CustomPrintingBackground{printing_background.png}
+\else
+    \CustomBackground{normal_background.png}
+\fi
+\input{Kapitel/ExampleChapter.tex}
 
-\CustomBackground{Artboard 1_light.png}{Artboard 2_light.png}
-\input{Kapitel/Example}
-
-\CustomBackground{Artboard 1.png}{Artboard 2.png}
+\ifprinting
+    \CustomPrintingBackground{printing_background.png}
+\else
+    \CustomBackground{normal_background.png}
+\fi
 \input{Kapitel/Index}
+
+
+\fancypagestyle{Cover}{
+    \fancyhead{} % clear all header fields
+    \fancyhead[LE,RO]{\textbf{ }}
+}
+\pagestyle{Cover}
+
+
+\ifcover
+    \newpage
+
+    \CustomBackground{PurpleGeltex.jpg}
+
+    \hspace{1cm}
+\fi
+
 
 \end{document}
